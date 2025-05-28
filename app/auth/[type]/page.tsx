@@ -121,7 +121,8 @@ export default function AuthPage() {
             </form>
           </Form>
           {isLogin && (
-            <div className="m-5 mb-0">
+            <div className="m-5 mb-2">
+              <p className="text-center text-sm text-gray-500 mb-4">ou</p>
               <Button
                 variant="outline"
                 className="w-full flex items-center justify-center gap-2 text-primary/80 hover:text-primary/70"
