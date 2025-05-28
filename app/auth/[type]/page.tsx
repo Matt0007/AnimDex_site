@@ -74,18 +74,6 @@ export default function AuthPage() {
           <CardTitle className="text-center text-2xl font-bold text-primary">
             {title}
           </CardTitle>
-          {isLogin && (
-            <div className="mt-2 space-y-2 ">
-              <Button
-                variant="outline"
-                className="w-full flex items-center justify-center gap-2 text-primary/80 hover:text-primary/70"
-                onClick={() => signIn("google", { callbackUrl: "/" })}
-              >
-                <FcGoogle className="size-5" />
-                Se connecter avec Google
-              </Button>
-            </div>
-          )}
 
           {title !== "Page non trouvée" && (
             <CardDescription className="text-center">
@@ -124,6 +112,7 @@ export default function AuthPage() {
                   </Link>
                 </div>
               )}
+
               {title !== "Page non trouvée" && (
                 <Button className="w-full mt-2" type="submit">
                   {ButtonText}
@@ -131,6 +120,18 @@ export default function AuthPage() {
               )}
             </form>
           </Form>
+          {isLogin && (
+            <div className="m-5 mb-0">
+              <Button
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2 text-primary/80 hover:text-primary/70"
+                onClick={() => signIn("google", { callbackUrl: "/" })}
+              >
+                <FcGoogle className="size-5" />
+                Se connecter avec Google
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
