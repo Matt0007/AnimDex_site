@@ -34,13 +34,6 @@ export const AUTH_FORM = {
   ],
   REGISTER: [
     {
-      label: "Nom",
-      name: "name",
-      type: "text",
-      placeholder: "Nom",
-      required: true,
-    },
-    {
       label: "Prénom",
       name: "firstname",
       type: "text",

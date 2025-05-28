@@ -15,6 +15,10 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { FcGoogle } from "react-icons/fc"; // Flat Color icon
+
+
 export default function AuthPage() {
   const { type } = useParams();
   const form = useForm();
@@ -70,16 +74,29 @@ export default function AuthPage() {
           <CardTitle className="text-center text-2xl font-bold text-primary">
             {title}
           </CardTitle>
-           {title !== "Page non trouvée" && (
-          <CardDescription className="text-center">
-            <span>ou </span>
-            <Link
-              href={redirectLink}
-              className="text-primary/80 hover:text-primary/70 transition-colors"
-            >
-              {linkText}
-            </Link>
-          </CardDescription>
+          {isLogin && (
+            <div className="mt-2 space-y-2 ">
+              <Button
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2 text-primary/80 hover:text-primary/70"
+                onClick={() => signIn("google", { callbackUrl: "/" })}
+              >
+                <FcGoogle className="size-5" />
+                Se connecter avec Google
+              </Button>
+            </div>
+          )}
+
+          {title !== "Page non trouvée" && (
+            <CardDescription className="text-center">
+              <span>ou </span>
+              <Link
+                href={redirectLink}
+                className="text-primary/80 hover:text-primary/70 transition-colors"
+              >
+                {linkText}
+              </Link>
+            </CardDescription>
           )}
         </CardHeader>
         <CardContent>
