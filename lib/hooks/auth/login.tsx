@@ -25,7 +25,7 @@ export const useLogin = () => {
       toast.success("Connexion réussie !");
       router.push("/"); // ou ta route protégée
     } else {
-      setLoginError("Identifiants invalides");
+      setLoginError("Email ou mot de passe incorrect");
     }
     setLoginLoading(false);
   };

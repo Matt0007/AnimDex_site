@@ -1,8 +1,12 @@
 "use client";
 
-export default function Home() {
+import { useSession } from "next-auth/react";
 
-  return <div className="min-h-screen">
-    <h1></h1>
-  </div>;
+export default function Home() {
+  const { data: session } = useSession();
+  return (
+    <div className="min-h-screen">
+      <h1>Hello {session?.user?.name}</h1>
+    </div>
+  );
 }

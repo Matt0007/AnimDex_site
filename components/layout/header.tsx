@@ -1,10 +1,13 @@
+"use client";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import { ICONS_NAV, NAV_LINKS } from "@/lib/constants/layout/header";
+import { signOut, useSession } from "next-auth/react";
 
 export function Header() {
+    const { data: session } = useSession();
   return (
     <header className="top-0 z-50 w-full border-b bg-background/90 shadow-sm backdrop-blur-md">
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
@@ -72,11 +75,24 @@ export function Header() {
 
         {/* Right: User Icon */}
         <div className="flex items-center gap-2">
-            {ICONS_NAV.map((icon) => (
-                <Button key={icon.href} variant="ghost" size="icon">
-                    <Link href={icon.href}>{icon.icons}</Link>
-                </Button>
-            ))}
+          {ICONS_NAV.map((item, i) => {
+            if (item.logout && !session?.user) return null;
+
+            return item.logout ? (
+              <Button
+                variant="ghost"
+                key={i}
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="flex items-center gap-2"
+              >
+                {item.icons}
+              </Button>
+            ) : (
+              <Button key={item.href} variant="ghost" size="icon" asChild>
+                <Link href={item.href}>{item.icons}</Link>
+              </Button>
+            );
+          })}
         </div>
       </div>
     </header>
