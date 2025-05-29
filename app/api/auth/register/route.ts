@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
+    const formattedName = name.trim();
 
     // Vérifier si l'utilisateur existe déjà
     const existingUser = await prisma.user.findUnique({
@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
       data: {
         email,
         password: hashedPassword,
+        name: formattedName,
       },
       select: {
         id: true,

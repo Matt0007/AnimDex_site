@@ -25,7 +25,8 @@ import { FcGoogle } from "react-icons/fc";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRegister } from "@/lib/hooks/auth/register";
 import { Loader2 } from "lucide-react";
-import { RegisterData } from "@/lib/type/auth";
+import { LoginData, RegisterData } from "@/lib/type/auth";
+import { useLogin } from "@/lib/hooks/auth/login";
 
 export default function AuthPage() {
   const { type } = useParams();
@@ -77,12 +78,16 @@ export default function AuthPage() {
 
     const { register, registerLoading, registerError } =
       useRegister();
+      const { login, loginLoading, loginError } = useLogin();
+  const loading = registerLoading || loginLoading ;
+  const error = registerError || loginError ;
 
-  const loading = registerLoading ;
-  const error = registerError ;
   const handleSubmit = form.handleSubmit((data) => {
     if (isRegister) {
       register(data as RegisterData);
+    }
+    if (isLogin) {
+      login(data as LoginData);
     }
   });
 
@@ -124,16 +129,6 @@ export default function AuthPage() {
                 </div>
               ))}
 
-              {isLogin && (
-                <div className="text-sm text-center ">
-                  <Link
-                    href="/auth/forgot-password"
-                    className="text-primary/80 hover:text-primary transition-colors underline underline-offset-4"
-                  >
-                    Mot de passe oublié ?
-                  </Link>
-                </div>
-              )}
               {isRegister && (
                 <Controller
                   name="terms"
@@ -183,6 +178,16 @@ export default function AuthPage() {
                   </p>
                 )}
               </div>
+              {isLogin && (
+                <div className="text-sm text-center ">
+                  <Link
+                    href="/auth/forgot-password"
+                    className="text-primary/80 hover:text-primary transition-colors underline underline-offset-4"
+                  >
+                    Mot de passe oublié ?
+                  </Link>
+                </div>
+              )}
               {title !== "Page non trouvée" &&
                 (loading ? (
                   <Button disabled className="w-full" type="submit">
