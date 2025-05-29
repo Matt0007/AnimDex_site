@@ -38,7 +38,7 @@ export const AUTH_FORM = {
   REGISTER: [
     {
       label: "Prénom",
-      name: "firstname",
+      name: "name",
       type: "text",
       placeholder: "Prénom",
       required: true,
@@ -59,9 +59,10 @@ export const AUTH_FORM = {
     },
     {
       label: "Confirmation du mot de passe",
-      name: "password_confirmation",
+      name: "confirmPassword",
       type: "password",
       placeholder: "Confirmation du mot de passe",
+      required: true,
     },
   ],
   FORGOT_PASSWORD: [

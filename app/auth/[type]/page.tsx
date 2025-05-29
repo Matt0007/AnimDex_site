@@ -1,5 +1,4 @@
 "use client";
-
 import { useParams } from "next/navigation";
 import { AuthType } from "@/lib/type/layout/header";
 import {
@@ -19,11 +18,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRegister } from "@/lib/hooks/auth/register";
+import { Loader2 } from "lucide-react";
+import { RegisterData } from "@/lib/type/auth";
 
 export default function AuthPage() {
   const { type } = useParams();
@@ -73,8 +75,15 @@ export default function AuthPage() {
     ? AUTH_BUTTON_TEXT.FORGOT_PASSWORD
     : "";
 
+    const { register, registerLoading, registerError } =
+      useRegister();
+
+  const loading = registerLoading ;
+  const error = registerError ;
   const handleSubmit = form.handleSubmit((data) => {
-    console.log(data);
+    if (isRegister) {
+      register(data as RegisterData);
+    }
   });
 
   return (
@@ -126,44 +135,64 @@ export default function AuthPage() {
                 </div>
               )}
               {isRegister && (
-                <div className="flex items-start gap-3 text-sm text-muted-foreground pt-1 ">
-                  <Checkbox
-                    id="terms"
-                    {...form.register("terms", { required: true })}
-                    className="mt-1"
-                  />
-                  <div className="space-y-1 leading-snug ">
-                    <p>
-                      J’accepte les{" "}
-                      <Link
-                        href="/cgu"
-                        className="underline hover:text-primary transition-colors"
-                      >
-                        conditions d’utilisation
-                      </Link>{" "}
-                      et la{" "}
-                      <Link
-                        href="/privacy"
-                        className="underline hover:text-primary transition-colors"
-                      >
-                        politique de confidentialité
-                      </Link>
-                      .
-                    </p>
-                    {form.formState.errors.terms && (
-                      <p className="text-sm text-destructive">
-                        Merci d’accepter les conditions.
-                      </p>
-                    )}
-                  </div>
-                </div>
+                <Controller
+                  name="terms"
+                  control={form.control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <div className="flex items-start gap-3 text-sm text-muted-foreground pt-1">
+                      <Checkbox
+                        id="terms"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        className="mt-1"
+                      />
+                      <div className="space-y-1 leading-snug">
+                        <p>
+                          J’accepte les{" "}
+                          <Link
+                            href="/cgu"
+                            className="underline hover:text-primary transition-colors"
+                          >
+                            conditions d’utilisation
+                          </Link>{" "}
+                          et la{" "}
+                          <Link
+                            href="/privacy"
+                            className="underline hover:text-primary transition-colors"
+                          >
+                            politique de confidentialité
+                          </Link>
+                        </p>
+                        <div className="flex items-center justify-center me-5">
+                          {form.formState.errors.terms && (
+                            <p className="text-sm text-destructive text-center">
+                              Merci d’accepter les conditions.
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                />
               )}
-
-              {title !== "Page non trouvée" && (
-                <Button className="w-full" type="submit">
-                  {ButtonText}
-                </Button>
-              )}
+              <div className="flex items-center justify-center ">
+                {error && (
+                  <p className="text-sm text-destructive text-center">
+                    {error}
+                  </p>
+                )}
+              </div>
+              {title !== "Page non trouvée" &&
+                (loading ? (
+                  <Button disabled className="w-full" type="submit">
+                    <Loader2 className="size-4 animate-spin" />
+                  </Button>
+                ) : (
+                  <Button disabled={loading} className="w-full" type="submit">
+                    {ButtonText}
+                  </Button>
+                ))}
             </form>
           </Form>
 
@@ -182,6 +211,7 @@ export default function AuthPage() {
 
           {isLogin && (
             <Button
+              disabled={loading}
               variant="outline"
               className="w-full flex items-center justify-center gap-2"
               onClick={() => signIn("google", { callbackUrl: "/" })}
