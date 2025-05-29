@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function AuthPage() {
   const { type } = useParams();
@@ -30,22 +31,29 @@ export default function AuthPage() {
 
   const isLogin = type === AuthType.LOGIN;
   const isRegister = type === AuthType.REGISTER;
+  const isForgotPassword = type === AuthType.FORGOT_PASSWORD;
 
   const title = isLogin
     ? AUTH_TITLE.LOGIN
     : isRegister
     ? AUTH_TITLE.REGISTER
+    : isForgotPassword
+    ? AUTH_TITLE.FORGOT_PASSWORD
     : AUTH_TITLE.NOT_FOUND;
 
   const formFields = isLogin
     ? AUTH_FORM.LOGIN
     : isRegister
     ? AUTH_FORM.REGISTER
+    : isForgotPassword
+    ? AUTH_FORM.FORGOT_PASSWORD
     : [];
 
   const redirectLink = isLogin
     ? AuthType.REGISTER
     : isRegister
+    ? AuthType.LOGIN
+    : isForgotPassword
     ? AuthType.LOGIN
     : "";
 
@@ -53,12 +61,16 @@ export default function AuthPage() {
     ? AUTH_LINK_TEXT.LOGIN
     : isRegister
     ? AUTH_LINK_TEXT.REGISTER
+    : isForgotPassword
+    ? AUTH_LINK_TEXT.FORGOT_PASSWORD
     : AUTH_LINK_TEXT.NOT_FOUND;
 
   const ButtonText = isLogin
     ? AUTH_BUTTON_TEXT.LOGIN
     : isRegister
     ? AUTH_BUTTON_TEXT.REGISTER
+    : isForgotPassword
+    ? AUTH_BUTTON_TEXT.FORGOT_PASSWORD
     : "";
 
   const handleSubmit = form.handleSubmit((data) => {
@@ -91,7 +103,9 @@ export default function AuthPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {formFields.map((field) => (
                 <div key={field.name}>
-                  <Label className="mb-2" htmlFor={field.name}>{field.label}</Label>
+                  <Label className="mb-2" htmlFor={field.name}>
+                    {field.label}
+                  </Label>
                   <Input
                     id={field.name}
                     type={field.type}
@@ -111,6 +125,39 @@ export default function AuthPage() {
                   </Link>
                 </div>
               )}
+              {isRegister && (
+                <div className="flex items-start gap-3 text-sm text-muted-foreground pt-1 ">
+                  <Checkbox
+                    id="terms"
+                    {...form.register("terms", { required: true })}
+                    className="mt-1"
+                  />
+                  <div className="space-y-1 leading-snug ">
+                    <p>
+                      J’accepte les{" "}
+                      <Link
+                        href="/cgu"
+                        className="underline hover:text-primary transition-colors"
+                      >
+                        conditions d’utilisation
+                      </Link>{" "}
+                      et la{" "}
+                      <Link
+                        href="/privacy"
+                        className="underline hover:text-primary transition-colors"
+                      >
+                        politique de confidentialité
+                      </Link>
+                      .
+                    </p>
+                    {form.formState.errors.terms && (
+                      <p className="text-sm text-destructive">
+                        Merci d’accepter les conditions.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {title !== "Page non trouvée" && (
                 <Button className="w-full" type="submit">
@@ -127,7 +174,7 @@ export default function AuthPage() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-background px-2 text-muted-foreground">
-                  ou continue avec
+                  ou connectez-vous avec
                 </span>
               </div>
             </div>

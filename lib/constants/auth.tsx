@@ -1,18 +1,21 @@
 export const AUTH_TITLE = {
   LOGIN: "Connexion",
   REGISTER: "Inscription",
+  FORGOT_PASSWORD: "Mot de passe oublié",
   NOT_FOUND: "Page non trouvée",
 };
 
 export const AUTH_LINK_TEXT = {
-  LOGIN: "Vous n'avez pas de compte ?",
-  REGISTER: "Vous avez déjà un compte ?",
-  NOT_FOUND: "La page que vous cherchez n'existe pas",
+  LOGIN: "vous n'avez pas de compte ?",
+  REGISTER: "vous avez déjà un compte ?",
+  FORGOT_PASSWORD: "vous connaissez votre mot de passe ?",
+  NOT_FOUND: "la page que vous cherchez n'existe pas"
 };
 
 export const AUTH_BUTTON_TEXT = {
   LOGIN: "Connexion",
   REGISTER: "Inscription",
+  FORGOT_PASSWORD: "Envoyer",
 };
 
 export const AUTH_FORM = {
@@ -44,7 +47,7 @@ export const AUTH_FORM = {
       label: "Email",
       name: "email",
       type: "email",
-      placeholder: "Email", 
+      placeholder: "Email",
       required: true,
     },
     {
@@ -59,6 +62,15 @@ export const AUTH_FORM = {
       name: "password_confirmation",
       type: "password",
       placeholder: "Confirmation du mot de passe",
+    },
+  ],
+  FORGOT_PASSWORD: [
+    {
+      label: "Email",
+      name: "email",
+      type: "email",
+      placeholder: "Email",
+      required: true,
     },
   ],
 };
